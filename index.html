@@ -216,12 +216,12 @@ function rebuildDyn(){
 
   if (a < 1) { $("adultos").value = "1"; a = 1; }
 
-  // Adulto 1 = responsável
-  dyn.innerHTML += `<label>Adulto 1 (Responsável)</label>
-    <input id="adulto1" required readonly placeholder="Preenchido automaticamente" />`;
+// Adulto 1 = responsável
+dyn.innerHTML += `<label>Adulto 1 (Responsável)</label>
+  <input id="adulto1" required readonly />`;
 
-  const a1 = document.getElementById("adulto1");
-  if (a1) a1.value = responsavel;
+const a1 = document.getElementById("adulto1");
+if (a1) a1.value = $("responsavel").value.trim(); // SEM placeholder
 
   // Adultos extras
   for (let i=2; i<=a; i++){
@@ -241,9 +241,10 @@ function rebuildDyn(){
 });
 
 $("responsavel").addEventListener("input", ()=>{
-  const a1 = document.getElementById("adulto1");
-  if (a1) a1.value = $("responsavel").value.trim();
-});
+  // sempre que digitar, reconstruir o bloco dinamico
+  // isso garante que Adulto 1 nunca "reseta" ao mexer nos combos
+  rebuildDyn();
+});;
 
 $("vai").addEventListener("change", ()=>{
   if ($("vai").value === "Não") {
@@ -350,3 +351,4 @@ $("rsvp").addEventListener("submit", async (e)=>{
 </script>
 </body>
 </html>
+
