@@ -1,57 +1,100 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>Confirmação de Presença</title>
 
 <style>
-:root{
---red:#e3000f; --blue:#1b65ff; --yellow:#ffd23c; --green:#1fbf75;
---bg1:#0b1020;
-}
 *{box-sizing:border-box}
-
 body{
 margin:0;
-font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
-background: radial-gradient(1000px 500px at 20% 10%, rgba(27,101,255,.25), transparent),
-linear-gradient(180deg, #070a14, var(--bg1));
-color:#fff;
+font-family:Arial, Helvetica, sans-serif;
+background:linear-gradient(#8ed6ff,#5db9ff);
 min-height:100vh;
 display:flex;
 justify-content:center;
-padding:24px;
+padding:20px;
+color:#222;
 }
 
-.wrap{width:min(720px, 100%)}
+/* Nuvens */
+body::before{
+content:"";
+position:fixed;
+top:0;
+left:0;
+right:0;
+height:200px;
+background:
+url('https://i.imgur.com/6Iej2c3.png');
+background-size:contain;
+opacity:.4;
+pointer-events:none;
+}
+
+/* Plataforma verde inferior */
+body::after{
+content:"";
+position:fixed;
+bottom:0;
+left:0;
+right:0;
+height:80px;
+background:linear-gradient(#2ecc40,#1e9f2e);
+}
+
+.wrap{
+width:min(600px,100%);
+z-index:1;
+}
 
 .banner{
-background: linear-gradient(90deg, rgba(227,0,15,.25), rgba(27,101,255,.2));
-border-radius:18px;
-padding:20px;
+background:#ffcc00;
+border-radius:16px;
+padding:18px;
+text-align:center;
+box-shadow:0 8px 20px rgba(0,0,0,.3);
 margin-bottom:20px;
-box-shadow:0 20px 60px rgba(0,0,0,.4);
 }
 
-h1{margin:0;font-size:22px}
-.sub{opacity:.85;font-size:14px;margin-top:6px}
+.banner h1{
+margin:0;
+font-size:24px;
+color:#d90000;
+}
+
+.banner p{
+margin-top:8px;
+font-size:15px;
+}
 
 .card{
-background:rgba(16,26,51,.85);
+background:#ffffff;
 border-radius:18px;
-padding:18px;
-box-shadow:0 18px 55px rgba(0,0,0,.35);
+padding:20px;
+box-shadow:0 10px 25px rgba(0,0,0,.3);
 }
 
-label{display:block;font-size:13px;margin:12px 0 6px}
+label{
+display:block;
+margin:12px 0 6px;
+font-weight:bold;
+}
+
 input,select{
 width:100%;
 padding:12px;
-border-radius:14px;
-border:1px solid rgba(255,255,255,.15);
-background:rgba(0,0,0,.25);
-color:#fff;
+border-radius:12px;
+border:2px solid #ddd;
+font-size:14px;
+background:#fff;
+color:#000;
+}
+
+select{
+background:#ffffff;
+color:#000;
 }
 
 .row{
@@ -61,30 +104,50 @@ gap:10px;
 }
 
 button{
+margin-top:16px;
+width:100%;
+padding:14px;
 border:0;
-border-radius:16px;
-padding:12px 16px;
-font-weight:700;
+border-radius:14px;
+font-size:16px;
+font-weight:bold;
 cursor:pointer;
-margin-top:14px;
-}
-
-.primary{
-background:linear-gradient(90deg,var(--red),#ff3b2f);
+background:#e3000f;
 color:#fff;
+transition:.2s;
 }
 
-.pill{
-display:inline-block;
-margin-left:10px;
-padding:8px 12px;
-border-radius:999px;
-background:rgba(255,255,255,.08);
-font-size:13px;
+button:hover{
+background:#b8000c;
 }
 
 .success{
-color:#9ff3c9;
+margin-top:14px;
+padding:12px;
+background:#d4ffd4;
+border-radius:12px;
+color:#006600;
+font-weight:bold;
+text-align:center;
+}
+
+/* Bloco ? decorativo */
+.block{
+width:50px;
+height:50px;
+background:#ffcc00;
+border:4px solid #c49b00;
+border-radius:8px;
+display:flex;
+align-items:center;
+justify-content:center;
+font-weight:bold;
+font-size:26px;
+color:#c49b00;
+position:absolute;
+right:-20px;
+top:-20px;
+box-shadow:0 6px 12px rgba(0,0,0,.3);
 }
 </style>
 </head>
@@ -93,14 +156,13 @@ color:#9ff3c9;
 <div class="wrap">
 
 <div class="banner">
-<h1>Confirmação de Presença 🎉</h1>
-<div class="sub">
-Estamos preparando uma festa cheia de diversão!  
-Confirme sua presença abaixo 💛
-</div>
+<h1>Aniversário do Murilo 🎉</h1>
+<p>Vai ser uma aventura incrível! Confirme sua presença 💛</p>
 </div>
 
 <div class="card">
+<div class="block">?</div>
+
 <form id="rsvp">
 
 <label>Você vai?</label>
@@ -111,10 +173,10 @@ Confirme sua presença abaixo 💛
 </select>
 
 <label>Nome do responsável</label>
-<input id="responsavel" required placeholder="Ex.: Mario Da Silva Bros" />
+<input id="responsavel" required placeholder="Ex.: Mario Da Silva Bros"/>
 
 <label>Telefone (WhatsApp)</label>
-<input id="telefone" placeholder="Ex.: (11) 99999-9999" />
+<input id="telefone" placeholder="Ex.: (11) 99999-9999"/>
 
 <div class="row">
 <div>
@@ -134,8 +196,9 @@ Confirme sua presença abaixo 💛
 
 <div id="dyn"></div>
 
-<button class="primary" type="submit">Confirmar presença</button>
-<span class="pill" id="status">Pronto.</span>
+<button type="submit">Confirmar Presença ⭐</button>
+
+<div id="msg"></div>
 
 </form>
 </div>
@@ -143,24 +206,21 @@ Confirme sua presença abaixo 💛
 </div>
 
 <script>
-
-const $ = id => document.getElementById(id);
-const dyn = $("dyn");
-const statusEl = $("status");
+const $=id=>document.getElementById(id);
+const dyn=$("dyn");
+const msg=$("msg");
 
 function rebuildDyn(){
 dyn.innerHTML="";
-const vai=$("vai").value;
-if(vai!=="Sim") return;
+if($("vai").value!=="Sim")return;
 
-const a=Number($("adultos").value||0);
-const c=Number($("criancas").value||0);
+let a=Number($("adultos").value);
+let c=Number($("criancas").value);
 
 for(let i=1;i<=a;i++){
 dyn.innerHTML+=`<label>Nome do Adulto ${i}</label>
 <input required placeholder="Adulto ${i}"/>`;
 }
-
 for(let i=1;i<=c;i++){
 dyn.innerHTML+=`<label>Nome da Criança ${i}</label>
 <input required placeholder="Criança ${i}"/>`;
@@ -173,14 +233,13 @@ $(id).addEventListener("change",rebuildDyn);
 
 $("rsvp").addEventListener("submit",e=>{
 e.preventDefault();
-
-statusEl.innerHTML="🎉 Presença confirmada com sucesso! Estamos ansiosos para celebrar juntos! ⭐";
-statusEl.classList.add("success");
-
+msg.innerHTML=`<div class="success">
+🎉 Presença confirmada com sucesso!  
+Estamos muito felizes que vocês vão participar dessa aventura! ⭐🍄
+</div>`;
 $("rsvp").reset();
 dyn.innerHTML="";
 });
-
 </script>
 
 </body>
