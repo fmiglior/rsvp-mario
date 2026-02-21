@@ -85,6 +85,11 @@ color:#fff;
 transition:.2s;
 }
 
+button:disabled{
+opacity:.65;
+cursor:not-allowed;
+}
+
 button:active{transform:scale(.98);}
 
 .success{
@@ -120,6 +125,12 @@ box-shadow:0 6px 12px rgba(0,0,0,.3);
 
 .card-container{position:relative;}
 
+.smallHint{
+font-size:12px;
+opacity:.75;
+margin-top:8px;
+}
+
 @media (max-width:480px){
 .banner h1{font-size:20px}
 .row{flex-direction:column}
@@ -151,16 +162,17 @@ box-shadow:0 6px 12px rgba(0,0,0,.3);
 
         <div class="row">
           <div>
-            <label>Quantos adultos?</label>
+            <label>Quantos adultos (incluindo o responsável)?</label>
             <select id="adultos">
-              <option>0</option><option>1</option><option>2</option><option>3</option><option>4</option>
+              <option>1</option><option>2</option><option>3</option><option>4</option><option>5</option>
             </select>
+            <div class="smallHint">O responsável conta como Adulto 1.</div>
           </div>
 
           <div>
             <label>Quantas crianças?</label>
             <select id="criancas">
-              <option>0</option><option>1</option><option>2</option><option>3</option><option>4</option>
+              <option>0</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option>
             </select>
           </div>
         </div>
@@ -180,7 +192,7 @@ box-shadow:0 6px 12px rgba(0,0,0,.3);
 <script>
 /* ================= CONFIG ================= */
 const ENDPOINT_URL = "https://script.google.com/macros/s/AKfycbxNmmbp80OxpEg1_ZiYceoZN5bXO_D1JJj-aBLXj1wey8FPHOotr5-oHTJ-ujBCKjBV/exec";
-const TOKEN = "AKfycbxNmmbp80OxpEg1_ZiYceoZN5bXO_D1JJj-aBLXj1wey8FPHOotr5-oHTJ-ujBCKjBV"; // tem que ser igual no Apps Script
+const TOKEN = "MARIO_RSVP_2026"; // tem que ser igual no Apps Script
 /* ========================================= */
 
 const $ = id => document.getElementById(id);
@@ -188,17 +200,42 @@ const dyn = $("dyn");
 const msg = $("msg");
 const btn = $("btn");
 
+function setMsg(html, kind="success"){
+  msg.innerHTML = `<div class="${kind}">${html}</div>`;
+}
+
 function rebuildDyn(){
   dyn.innerHTML = "";
-  if ($("vai").value !== "Sim") return;
 
-  const a = Number($("adultos").value || 0);
-  const c = Number($("criancas").value || 0);
+  const vai = $("vai").value;
+  if (vai !== "Sim") return;
 
-  for (let i=1; i<=a; i++){
-    dyn.innerHTML += `<label>Nome do Adulto ${i}</label>
-      <input required placeholder="Adulto ${i}" data-kind="adulto" />`;
+  // Responsável sempre é Adulto 1
+  const responsavel = $("responsavel").value.trim();
+  let a = Number($("adultos").value || 1);
+  let c = Number($("criancas").value || 0);
+
+  // Segurança: nunca permitir < 1 adulto se vai = Sim
+  if (a < 1) {
+    $("adultos").value = "1";
+    a = 1;
   }
+
+  // Adulto 1 = responsável (auto)
+  dyn.innerHTML += `<label>Adulto 1 (Responsável)</label>
+    <input id="adulto1" required readonly placeholder="Preenchido automaticamente" />`;
+
+  // Preenche Adulto 1 com o nome do responsável
+  const a1 = document.getElementById("adulto1");
+  if (a1) a1.value = responsavel;
+
+  // Adultos adicionais (2..a)
+  for (let i=2; i<=a; i++){
+    dyn.innerHTML += `<label>Nome do Adulto ${i}</label>
+      <input required placeholder="Adulto ${i}" data-kind="adulto_extra" />`;
+  }
+
+  // Crianças (1..c)
   for (let i=1; i<=c; i++){
     dyn.innerHTML += `<label>Nome da Criança ${i}</label>
       <input required placeholder="Criança ${i}" data-kind="crianca" />`;
@@ -207,6 +244,21 @@ function rebuildDyn(){
 
 ["vai","adultos","criancas"].forEach(id=>{
   $(id).addEventListener("change", rebuildDyn);
+});
+
+// Quando digitar responsável, atualiza Adulto 1 em tempo real
+$("responsavel").addEventListener("input", ()=>{
+  const a1 = document.getElementById("adulto1");
+  if (a1) a1.value = $("responsavel").value.trim();
+});
+
+// Se escolher "Não", faz sentido zerar crianças e adultos volta pra 1 (não importa, mas deixa limpo)
+$("vai").addEventListener("change", ()=>{
+  if ($("vai").value === "Não") {
+    $("criancas").value = "0";
+    // adultos deixamos como 1 (inofensivo), e não renderiza dyn de qualquer forma
+    dyn.innerHTML = "";
+  }
 });
 
 function simpleHash(s){
@@ -218,10 +270,6 @@ function simpleHash(s){
   return (h>>>0).toString(16);
 }
 
-function setMsg(html, kind="success"){
-  msg.innerHTML = `<div class="${kind}">${html}</div>`;
-}
-
 $("rsvp").addEventListener("submit", async (e)=>{
   e.preventDefault();
   msg.innerHTML = "";
@@ -230,34 +278,52 @@ $("rsvp").addEventListener("submit", async (e)=>{
 
   const vai = $("vai").value;
   const responsavel = $("responsavel").value.trim();
-  const adultos = Number($("adultos").value || 0);
+  const adultos = Number($("adultos").value || 1);
   const criancas = Number($("criancas").value || 0);
 
-  const inputs = Array.from(dyn.querySelectorAll("input"));
-  const nomesAdultos = inputs.filter(x=>x.dataset.kind==="adulto").map(x=>x.value.trim()).filter(Boolean);
-  const nomesCriancas = inputs.filter(x=>x.dataset.kind==="crianca").map(x=>x.value.trim()).filter(Boolean);
+  // Se vai = Sim, Adulto 1 é responsável e é obrigatório
+  if (vai === "Sim" && !responsavel) {
+    setMsg("Preencha o nome do responsável 🙂", "error");
+    btn.disabled = false; btn.textContent = "Confirmar Presença ⭐";
+    return;
+  }
 
-  if(vai==="Sim"){
-    if(nomesAdultos.length !== adultos){
+  // Coletar nomes:
+  // Adulto 1:
+  const nomesAdultos = [];
+  if (vai === "Sim") nomesAdultos.push(responsavel);
+
+  // Adultos extra:
+  const extraAdults = Array.from(dyn.querySelectorAll('input[data-kind="adulto_extra"]'))
+    .map(x=>x.value.trim()).filter(Boolean);
+
+  // Crianças:
+  const kids = Array.from(dyn.querySelectorAll('input[data-kind="crianca"]'))
+    .map(x=>x.value.trim()).filter(Boolean);
+
+  if (vai === "Sim") {
+    if (1 + extraAdults.length !== adultos) {
       setMsg("Preencha os nomes de todos os adultos 🙂", "error");
       btn.disabled = false; btn.textContent = "Confirmar Presença ⭐";
       return;
     }
-    if(nomesCriancas.length !== criancas){
+    if (kids.length !== criancas) {
       setMsg("Preencha os nomes de todas as crianças 🙂", "error");
       btn.disabled = false; btn.textContent = "Confirmar Presença ⭐";
       return;
     }
   }
 
+  nomesAdultos.push(...extraAdults);
+
   const payload = {
     token: TOKEN,
     vai,
     responsavel,
-    adultos,
-    criancas,
-    nomes_adultos: nomesAdultos.join(", "),
-    nomes_criancas: nomesCriancas.join(", "),
+    adultos: (vai === "Sim") ? adultos : 0,
+    criancas: (vai === "Sim") ? criancas : 0,
+    nomes_adultos: (vai === "Sim") ? nomesAdultos.join(", ") : "",
+    nomes_criancas: (vai === "Sim") ? kids.join(", ") : "",
   };
 
   payload.hash = simpleHash(JSON.stringify(payload));
@@ -272,8 +338,11 @@ $("rsvp").addEventListener("submit", async (e)=>{
     const data = await res.json().catch(()=> ({}));
     if(!res.ok || !data.ok) throw new Error(data.error || ("HTTP " + res.status));
 
-    setMsg("🎉 Presença confirmada com sucesso!<br/>Estamos muito felizes com vocês nessa aventura! ⭐🍄", "success");
+    setMsg("🎉 Presença confirmada com sucesso!<br/>Estamos muito felizes em celebrar com vocês! ⭐🍄", "success");
+
     $("rsvp").reset();
+    $("adultos").value = "1";
+    $("criancas").value = "0";
     dyn.innerHTML = "";
   } catch(err){
     setMsg("Ops! Não consegui enviar agora. Tente novamente em alguns segundos.", "error");
