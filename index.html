@@ -21,7 +21,6 @@ padding:20px 15px 100px 15px;
 color:#222;
 }
 
-/* Plataforma verde estilo Mario */
 .platform{
 position:fixed;
 bottom:0;
@@ -31,13 +30,8 @@ height:80px;
 background:#2ecc40;
 }
 
-/* Container principal */
-.wrap{
-width:100%;
-max-width:500px;
-}
+.wrap{width:100%;max-width:500px;}
 
-/* Banner */
 .banner{
 background:#ffcc00;
 border-radius:20px;
@@ -47,18 +41,9 @@ box-shadow:0 8px 25px rgba(0,0,0,.25);
 margin-bottom:20px;
 }
 
-.banner h1{
-margin:0;
-font-size:22px;
-color:#d90000;
-}
+.banner h1{margin:0;font-size:22px;color:#d90000;}
+.banner p{margin-top:8px;font-size:14px;}
 
-.banner p{
-margin-top:8px;
-font-size:14px;
-}
-
-/* Card */
 .card{
 background:#ffffff;
 border-radius:20px;
@@ -66,7 +51,6 @@ padding:20px;
 box-shadow:0 10px 30px rgba(0,0,0,.25);
 }
 
-/* Labels */
 label{
 display:block;
 margin:14px 0 6px;
@@ -74,7 +58,6 @@ font-weight:bold;
 font-size:14px;
 }
 
-/* Inputs */
 input,select{
 width:100%;
 padding:12px;
@@ -85,17 +68,9 @@ background:#fff;
 color:#000;
 }
 
-/* Linha dupla */
-.row{
-display:flex;
-gap:10px;
-}
+.row{display:flex;gap:10px;}
+.row > div{flex:1;}
 
-.row > div{
-flex:1;
-}
-
-/* Botão */
 button{
 margin-top:18px;
 width:100%;
@@ -110,9 +85,7 @@ color:#fff;
 transition:.2s;
 }
 
-button:active{
-transform:scale(.98);
-}
+button:active{transform:scale(.98);}
 
 .success{
 margin-top:15px;
@@ -124,30 +97,29 @@ font-weight:bold;
 text-align:center;
 }
 
-/* Bloco ? decorativo */
+.error{
+margin-top:15px;
+padding:12px;
+background:#ffe0e0;
+border-radius:12px;
+color:#8a0000;
+font-weight:bold;
+text-align:center;
+}
+
 .block{
-width:45px;
-height:45px;
+width:45px;height:45px;
 background:#ffcc00;
 border:4px solid #c49b00;
 border-radius:8px;
-display:flex;
-align-items:center;
-justify-content:center;
-font-weight:bold;
-font-size:24px;
-color:#c49b00;
-position:absolute;
-right:-15px;
-top:-15px;
+display:flex;align-items:center;justify-content:center;
+font-weight:bold;font-size:24px;color:#c49b00;
+position:absolute;right:-15px;top:-15px;
 box-shadow:0 6px 12px rgba(0,0,0,.3);
 }
 
-.card-container{
-position:relative;
-}
+.card-container{position:relative;}
 
-/* Ajuste Mobile */
 @media (max-width:480px){
 .banner h1{font-size:20px}
 .row{flex-direction:column}
@@ -156,99 +128,160 @@ position:relative;
 </head>
 
 <body>
-
 <div class="wrap">
+  <div class="banner">
+    <h1>Aniversário do Murilo 🎉</h1>
+    <p>Vai ser uma aventura incrível! Confirme sua presença 💛</p>
+  </div>
 
-<div class="banner">
-<h1>Aniversário do Murilo 🎉</h1>
-<p>Vai ser uma aventura incrível! Confirme sua presença 💛</p>
-</div>
+  <div class="card-container">
+    <div class="block">?</div>
 
-<div class="card-container">
-<div class="block">?</div>
+    <div class="card">
+      <form id="rsvp">
+        <label>Você vai?</label>
+        <select id="vai" required>
+          <option value="" disabled selected>Selecione</option>
+          <option>Sim</option>
+          <option>Não</option>
+        </select>
 
-<div class="card">
-<form id="rsvp">
+        <label>Nome do responsável</label>
+        <input id="responsavel" required placeholder="Ex.: Mario Da Silva Bros"/>
 
-<label>Você vai?</label>
-<select id="vai" required>
-<option value="" disabled selected>Selecione</option>
-<option>Sim</option>
-<option>Não</option>
-</select>
+        <div class="row">
+          <div>
+            <label>Quantos adultos?</label>
+            <select id="adultos">
+              <option>0</option><option>1</option><option>2</option><option>3</option><option>4</option>
+            </select>
+          </div>
 
-<label>Nome do responsável</label>
-<input id="responsavel" required placeholder="Ex.: Mario Da Silva Bros"/>
+          <div>
+            <label>Quantas crianças?</label>
+            <select id="criancas">
+              <option>0</option><option>1</option><option>2</option><option>3</option><option>4</option>
+            </select>
+          </div>
+        </div>
 
-<label>Telefone (WhatsApp)</label>
-<input id="telefone" placeholder="Ex.: (11) 99999-9999"/>
+        <div id="dyn"></div>
 
-<div class="row">
-<div>
-<label>Quantos adultos?</label>
-<select id="adultos">
-<option>0</option><option>1</option><option>2</option><option>3</option><option>4</option>
-</select>
-</div>
+        <button type="submit" id="btn">Confirmar Presença ⭐</button>
 
-<div>
-<label>Quantas crianças?</label>
-<select id="criancas">
-<option>0</option><option>1</option><option>2</option><option>3</option><option>4</option>
-</select>
-</div>
-</div>
-
-<div id="dyn"></div>
-
-<button type="submit">Confirmar Presença ⭐</button>
-
-<div id="msg"></div>
-
-</form>
-</div>
-</div>
-
+        <div id="msg"></div>
+      </form>
+    </div>
+  </div>
 </div>
 
 <div class="platform"></div>
 
 <script>
-const $=id=>document.getElementById(id);
-const dyn=$("dyn");
-const msg=$("msg");
+/* ================= CONFIG ================= */
+const ENDPOINT_URL = "https://script.google.com/macros/s/AKfycbxNmmbp80OxpEg1_ZiYceoZN5bXO_D1JJj-aBLXj1wey8FPHOotr5-oHTJ-ujBCKjBV/exec";
+const TOKEN = "AKfycbxNmmbp80OxpEg1_ZiYceoZN5bXO_D1JJj-aBLXj1wey8FPHOotr5-oHTJ-ujBCKjBV"; // tem que ser igual no Apps Script
+/* ========================================= */
+
+const $ = id => document.getElementById(id);
+const dyn = $("dyn");
+const msg = $("msg");
+const btn = $("btn");
 
 function rebuildDyn(){
-dyn.innerHTML="";
-if($("vai").value!=="Sim")return;
+  dyn.innerHTML = "";
+  if ($("vai").value !== "Sim") return;
 
-let a=Number($("adultos").value);
-let c=Number($("criancas").value);
+  const a = Number($("adultos").value || 0);
+  const c = Number($("criancas").value || 0);
 
-for(let i=1;i<=a;i++){
-dyn.innerHTML+=`<label>Nome do Adulto ${i}</label>
-<input required placeholder="Adulto ${i}"/>`;
-}
-for(let i=1;i<=c;i++){
-dyn.innerHTML+=`<label>Nome da Criança ${i}</label>
-<input required placeholder="Criança ${i}"/>`;
-}
+  for (let i=1; i<=a; i++){
+    dyn.innerHTML += `<label>Nome do Adulto ${i}</label>
+      <input required placeholder="Adulto ${i}" data-kind="adulto" />`;
+  }
+  for (let i=1; i<=c; i++){
+    dyn.innerHTML += `<label>Nome da Criança ${i}</label>
+      <input required placeholder="Criança ${i}" data-kind="crianca" />`;
+  }
 }
 
 ["vai","adultos","criancas"].forEach(id=>{
-$(id).addEventListener("change",rebuildDyn);
+  $(id).addEventListener("change", rebuildDyn);
 });
 
-$("rsvp").addEventListener("submit",e=>{
-e.preventDefault();
-msg.innerHTML=`<div class="success">
-🎉 Presença confirmada com sucesso!  
-Estamos muito felizes que vocês vão participar dessa aventura! ⭐🍄
-</div>`;
-$("rsvp").reset();
-dyn.innerHTML="";
+function simpleHash(s){
+  let h=2166136261;
+  for(let i=0;i<s.length;i++){
+    h ^= s.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return (h>>>0).toString(16);
+}
+
+function setMsg(html, kind="success"){
+  msg.innerHTML = `<div class="${kind}">${html}</div>`;
+}
+
+$("rsvp").addEventListener("submit", async (e)=>{
+  e.preventDefault();
+  msg.innerHTML = "";
+  btn.disabled = true;
+  btn.textContent = "Enviando...";
+
+  const vai = $("vai").value;
+  const responsavel = $("responsavel").value.trim();
+  const adultos = Number($("adultos").value || 0);
+  const criancas = Number($("criancas").value || 0);
+
+  const inputs = Array.from(dyn.querySelectorAll("input"));
+  const nomesAdultos = inputs.filter(x=>x.dataset.kind==="adulto").map(x=>x.value.trim()).filter(Boolean);
+  const nomesCriancas = inputs.filter(x=>x.dataset.kind==="crianca").map(x=>x.value.trim()).filter(Boolean);
+
+  if(vai==="Sim"){
+    if(nomesAdultos.length !== adultos){
+      setMsg("Preencha os nomes de todos os adultos 🙂", "error");
+      btn.disabled = false; btn.textContent = "Confirmar Presença ⭐";
+      return;
+    }
+    if(nomesCriancas.length !== criancas){
+      setMsg("Preencha os nomes de todas as crianças 🙂", "error");
+      btn.disabled = false; btn.textContent = "Confirmar Presença ⭐";
+      return;
+    }
+  }
+
+  const payload = {
+    token: TOKEN,
+    vai,
+    responsavel,
+    adultos,
+    criancas,
+    nomes_adultos: nomesAdultos.join(", "),
+    nomes_criancas: nomesCriancas.join(", "),
+  };
+
+  payload.hash = simpleHash(JSON.stringify(payload));
+
+  try{
+    const res = await fetch(ENDPOINT_URL, {
+      method:"POST",
+      headers:{ "Content-Type":"application/json" },
+      body: JSON.stringify(payload)
+    });
+
+    const data = await res.json().catch(()=> ({}));
+    if(!res.ok || !data.ok) throw new Error(data.error || ("HTTP " + res.status));
+
+    setMsg("🎉 Presença confirmada com sucesso!<br/>Estamos muito felizes com vocês nessa aventura! ⭐🍄", "success");
+    $("rsvp").reset();
+    dyn.innerHTML = "";
+  } catch(err){
+    setMsg("Ops! Não consegui enviar agora. Tente novamente em alguns segundos.", "error");
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "Confirmar Presença ⭐";
+  }
 });
 </script>
-
 </body>
 </html>
