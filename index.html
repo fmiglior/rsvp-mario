@@ -1,317 +1,187 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Confirmação de Presença • Super Mario</title>
-  <style>
-    :root{
-      --red:#e3000f; --blue:#1b65ff; --yellow:#ffd23c; --green:#1fbf75;
-      --bg1:#0b1020; --card:#101a33;
-    }
-    *{box-sizing:border-box}
-    body{
-      margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
-      background: radial-gradient(1000px 500px at 20% 10%, rgba(27,101,255,.25), transparent),
-                  radial-gradient(900px 600px at 80% 0%, rgba(255,210,60,.22), transparent),
-                  linear-gradient(180deg, #070a14, var(--bg1));
-      color:#fff;
-      min-height:100vh;
-      display:flex; justify-content:center; padding:24px;
-    }
-    .wrap{width:min(920px, 100%)}
-    .banner{
-      background: linear-gradient(90deg, rgba(227,0,15,.25), rgba(27,101,255,.2));
-      border:1px solid rgba(255,255,255,.12);
-      border-radius:18px;
-      padding:18px 18px;
-      display:flex; gap:14px; align-items:center;
-      box-shadow: 0 20px 70px rgba(0,0,0,.35);
-    }
-    .mario-dot{
-      width:44px; height:44px; border-radius:14px;
-      background: conic-gradient(from 180deg, var(--red), var(--yellow), var(--blue), var(--green), var(--red));
-      border:1px solid rgba(255,255,255,.18);
-      flex:0 0 auto;
-    }
-    h1{font-size:20px; margin:0}
-    .sub{opacity:.85; font-size:13px; margin-top:4px}
-    .grid{
-      display:grid;
-      grid-template-columns: 1fr;
-      gap:14px;
-      margin-top:14px;
-    }
-    @media(min-width:840px){
-      .grid{grid-template-columns: 1.2fr .8fr;}
-    }
-    .card{
-      background: rgba(16,26,51,.82);
-      border:1px solid rgba(255,255,255,.10);
-      border-radius:18px;
-      padding:16px;
-      box-shadow: 0 18px 55px rgba(0,0,0,.35);
-      backdrop-filter: blur(8px);
-    }
-    label{display:block; font-size:12px; opacity:.9; margin:10px 0 6px}
-    input, select, textarea{
-      width:100%;
-      padding:12px 12px;
-      border-radius:14px;
-      border:1px solid rgba(255,255,255,.14);
-      background: rgba(0,0,0,.25);
-      color:#fff;
-      outline:none;
-    }
-    textarea{min-height:92px; resize:vertical}
-    .row{display:grid; grid-template-columns: 1fr 1fr; gap:10px}
-    .btns{display:flex; gap:10px; flex-wrap:wrap; margin-top:14px}
-    button{
-      border:0; border-radius:16px;
-      padding:12px 14px;
-      font-weight:700;
-      cursor:pointer;
-      transform: translateY(0);
-      transition: transform .08s ease, filter .12s ease;
-    }
-    button:active{transform: translateY(1px) scale(.99)}
-    .primary{background:linear-gradient(90deg, var(--red), #ff3b2f); color:#fff}
-    .ghost{background:rgba(255,255,255,.10); color:#fff}
-    .ok{color:#9ff3c9}
-    .err{color:#ffb4b4}
-    .small{font-size:12px; opacity:.85; line-height:1.4}
-    .pill{
-      display:inline-flex; align-items:center; gap:8px;
-      padding:8px 10px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(0,0,0,.22);
-      font-size:12px;
-    }
-    .fadeIn{animation: fade .18s ease-out}
-    @keyframes fade {from{opacity:0; transform: translateY(4px)} to{opacity:1; transform:none}}
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Confirmação de Presença</title>
+
+<style>
+:root{
+--red:#e3000f; --blue:#1b65ff; --yellow:#ffd23c; --green:#1fbf75;
+--bg1:#0b1020;
+}
+*{box-sizing:border-box}
+
+body{
+margin:0;
+font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+background: radial-gradient(1000px 500px at 20% 10%, rgba(27,101,255,.25), transparent),
+linear-gradient(180deg, #070a14, var(--bg1));
+color:#fff;
+min-height:100vh;
+display:flex;
+justify-content:center;
+padding:24px;
+}
+
+.wrap{width:min(720px, 100%)}
+
+.banner{
+background: linear-gradient(90deg, rgba(227,0,15,.25), rgba(27,101,255,.2));
+border-radius:18px;
+padding:20px;
+margin-bottom:20px;
+box-shadow:0 20px 60px rgba(0,0,0,.4);
+}
+
+h1{margin:0;font-size:22px}
+.sub{opacity:.85;font-size:14px;margin-top:6px}
+
+.card{
+background:rgba(16,26,51,.85);
+border-radius:18px;
+padding:18px;
+box-shadow:0 18px 55px rgba(0,0,0,.35);
+}
+
+label{display:block;font-size:13px;margin:12px 0 6px}
+input,select{
+width:100%;
+padding:12px;
+border-radius:14px;
+border:1px solid rgba(255,255,255,.15);
+background:rgba(0,0,0,.25);
+color:#fff;
+}
+
+.row{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:10px;
+}
+
+button{
+border:0;
+border-radius:16px;
+padding:12px 16px;
+font-weight:700;
+cursor:pointer;
+margin-top:14px;
+}
+
+.primary{
+background:linear-gradient(90deg,var(--red),#ff3b2f);
+color:#fff;
+}
+
+.pill{
+display:inline-block;
+margin-left:10px;
+padding:8px 12px;
+border-radius:999px;
+background:rgba(255,255,255,.08);
+font-size:13px;
+}
+
+.success{
+color:#9ff3c9;
+}
+</style>
 </head>
+
 <body>
-  <div class="wrap">
-    <div class="banner">
-      <div class="mario-dot"></div>
-      <div>
-        <h1>Confirmação de Presença • Aniversário (Super Mario Bros)</h1>
-        <div class="sub">Preencha rapidinho — e eu já preparo a lista pro buffet 🍄⭐</div>
-      </div>
-    </div>
+<div class="wrap">
 
-    <div class="grid">
-      <div class="card">
-        <form id="rsvp">
-          <label>Você vai?</label>
-          <select id="vai" required>
-            <option value="" selected disabled>Selecione</option>
-            <option>Sim</option>
-            <option>Não</option>
-          </select>
+<div class="banner">
+<h1>Confirmação de Presença 🎉</h1>
+<div class="sub">
+Estamos preparando uma festa cheia de diversão!  
+Confirme sua presença abaixo 💛
+</div>
+</div>
 
-          <label>Nome do responsável</label>
-          <input id="responsavel" autocomplete="name" required placeholder="Ex.: Felipe Migliore" />
+<div class="card">
+<form id="rsvp">
 
-          <label>Telefone (WhatsApp)</label>
-          <input id="telefone" inputmode="tel" autocomplete="tel" placeholder="Ex.: (11) 99999-9999" />
+<label>Você vai?</label>
+<select id="vai" required>
+<option value="" disabled selected>Selecione</option>
+<option>Sim</option>
+<option>Não</option>
+</select>
 
-          <div class="row">
-            <div>
-              <label>Quantos adultos?</label>
-              <select id="adultos" required>
-                <option value="0">0</option><option value="1">1</option><option value="2">2</option>
-                <option value="3">3</option><option value="4">4</option><option value="5">5</option>
-              </select>
-            </div>
-            <div>
-              <label>Quantas crianças?</label>
-              <select id="criancas" required>
-                <option value="0">0</option><option value="1">1</option><option value="2">2</option>
-                <option value="3">3</option><option value="4">4</option><option value="5">5</option>
-              </select>
-            </div>
-          </div>
+<label>Nome do responsável</label>
+<input id="responsavel" required placeholder="Ex.: Mario Da Silva Bros" />
 
-          <div id="dyn" class="fadeIn"></div>
+<label>Telefone (WhatsApp)</label>
+<input id="telefone" placeholder="Ex.: (11) 99999-9999" />
 
-          <label>Observações (restrição alimentar, etc.)</label>
-          <textarea id="obs" placeholder="Opcional"></textarea>
+<div class="row">
+<div>
+<label>Quantos adultos?</label>
+<select id="adultos">
+<option>0</option><option>1</option><option>2</option><option>3</option><option>4</option>
+</select>
+</div>
 
-          <div class="btns">
-            <button class="primary" type="submit">Confirmar presença</button>
-            <button class="ghost" type="button" id="clear">Limpar</button>
-            <span class="pill" id="status">Pronto.</span>
-          </div>
+<div>
+<label>Quantas crianças?</label>
+<select id="criancas">
+<option>0</option><option>1</option><option>2</option><option>3</option><option>4</option>
+</select>
+</div>
+</div>
 
-          <div class="small" style="margin-top:12px;opacity:.75">
-            Dica: no celular tem feedback tátil quando você muda quantidades.
-          </div>
-        </form>
-      </div>
+<div id="dyn"></div>
 
-      <div class="card">
-        <div class="pill">📋 O que isso faz</div>
-        <p class="small">
-          • Escolheu quantos adultos/crianças → aparecem os campos de nomes automaticamente.<br/>
-          • Ao enviar, grava tudo no Google Sheets.<br/>
-          • A planilha já separa: Totais / Buffet (só quem vai) / Não vão.
-        </p>
+<button class="primary" type="submit">Confirmar presença</button>
+<span class="pill" id="status">Pronto.</span>
 
-        <div class="pill">🔒 Anti-spam</div>
-        <p class="small">
-          O envio usa um token simples (você pode trocar) e um hash para evitar duplicar fácil.
-        </p>
+</form>
+</div>
 
-        <div class="pill">⭐ Mario vibes</div>
-        <p class="small">
-          Se quiser, eu adapto com imagem do Mario, blocos “?” e uma mini animação de coin quando enviar.
-        </p>
-      </div>
-    </div>
-  </div>
+</div>
 
 <script>
-  // ======= CONFIG =======
-  const ENDPOINT_URL = "COLE_AQUI_A_URL_DO_WEB_APP"; // Apps Script Web App URL
-  const TOKEN = "MARIO_RSVP_2026"; // tem que bater com o Apps Script
-  // ======================
 
-  const $ = (id) => document.getElementById(id);
-  const form = $("rsvp");
-  const dyn = $("dyn");
-  const statusEl = $("status");
+const $ = id => document.getElementById(id);
+const dyn = $("dyn");
+const statusEl = $("status");
 
-  function haptic(ms=30){
-    try { if (navigator.vibrate) navigator.vibrate(ms); } catch(e){}
-  }
+function rebuildDyn(){
+dyn.innerHTML="";
+const vai=$("vai").value;
+if(vai!=="Sim") return;
 
-  function setStatus(msg, ok=true){
-    statusEl.textContent = msg;
-    statusEl.className = "pill " + (ok ? "ok":"err");
-  }
+const a=Number($("adultos").value||0);
+const c=Number($("criancas").value||0);
 
-  function mkNameFields(prefix, n){
-    const frag = document.createDocumentFragment();
-    for(let i=1;i<=n;i++){
-      const label = document.createElement("label");
-      label.textContent = `${prefix} ${i} - nome`;
-      const inp = document.createElement("input");
-      inp.required = true;
-      inp.placeholder = `Ex.: ${prefix === 'Adulto' ? 'Maria' : 'João'} ${i}`;
-      inp.dataset.kind = prefix.toLowerCase();
-      frag.appendChild(label);
-      frag.appendChild(inp);
-    }
-    return frag;
-  }
+for(let i=1;i<=a;i++){
+dyn.innerHTML+=`<label>Nome do Adulto ${i}</label>
+<input required placeholder="Adulto ${i}"/>`;
+}
 
-  function rebuildDyn(){
-    dyn.innerHTML = "";
-    const vai = $("vai").value;
-    const a = Number($("adultos").value || 0);
-    const c = Number($("criancas").value || 0);
+for(let i=1;i<=c;i++){
+dyn.innerHTML+=`<label>Nome da Criança ${i}</label>
+<input required placeholder="Criança ${i}"/>`;
+}
+}
 
-    if(vai !== "Sim"){
-      // se não vai, não força nomes
-      dyn.classList.add("fadeIn");
-      return;
-    }
+["vai","adultos","criancas"].forEach(id=>{
+$(id).addEventListener("change",rebuildDyn);
+});
 
-    if(a>0){
-      dyn.appendChild(mkNameFields("Adulto", a));
-    }
-    if(c>0){
-      dyn.appendChild(mkNameFields("Criança", c));
-    }
-    dyn.classList.add("fadeIn");
-  }
+$("rsvp").addEventListener("submit",e=>{
+e.preventDefault();
 
-  ["vai","adultos","criancas"].forEach(id=>{
-    $(id).addEventListener("change", ()=>{
-      haptic(35);
-      rebuildDyn();
-    });
-  });
+statusEl.innerHTML="🎉 Presença confirmada com sucesso! Estamos ansiosos para celebrar juntos! ⭐";
+statusEl.classList.add("success");
 
-  $("clear").addEventListener("click", ()=>{
-    form.reset();
-    dyn.innerHTML = "";
-    setStatus("Limpo.");
-    haptic(25);
-  });
+$("rsvp").reset();
+dyn.innerHTML="";
+});
 
-  function simpleHash(s){
-    // hash simples (não criptográfico) só pra ter um identificador
-    let h=2166136261;
-    for(let i=0;i<s.length;i++){
-      h ^= s.charCodeAt(i);
-      h = Math.imul(h, 16777619);
-    }
-    return (h>>>0).toString(16);
-  }
-
-  form.addEventListener("submit", async (e)=>{
-    e.preventDefault();
-
-    const vai = $("vai").value;
-    const responsavel = $("responsavel").value.trim();
-    const telefone = $("telefone").value.trim();
-    const adultos = Number($("adultos").value || 0);
-    const criancas = Number($("criancas").value || 0);
-    const obs = $("obs").value.trim();
-
-    // coletar nomes dinâmicos
-    const inputs = Array.from(dyn.querySelectorAll("input"));
-    const nomesAdultos = inputs.filter(x=>x.dataset.kind==="adulto").map(x=>x.value.trim()).filter(Boolean);
-    const nomesCriancas = inputs.filter(x=>x.dataset.kind==="criança").map(x=>x.value.trim()).filter(Boolean);
-
-    if(vai==="Sim"){
-      if(nomesAdultos.length !== adultos) return setStatus("Preencha todos os nomes de adultos.", false);
-      if(nomesCriancas.length !== criancas) return setStatus("Preencha todos os nomes de crianças.", false);
-    }
-
-    const payload = {
-      token: TOKEN,
-      vai,
-      responsavel,
-      telefone,
-      adultos,
-      criancas,
-      nomes_adultos: nomesAdultos.join(", "),
-      nomes_criancas: nomesCriancas.join(", "),
-      obs,
-    };
-
-    payload.hash = simpleHash(JSON.stringify(payload));
-
-    try{
-      setStatus("Enviando...");
-      haptic(20);
-
-      const res = await fetch(ENDPOINT_URL, {
-        method: "POST",
-        headers: {"Content-Type":"application/json"},
-        body: JSON.stringify(payload)
-      });
-
-      const data = await res.json().catch(()=>({}));
-
-      if(!res.ok || !data.ok){
-        throw new Error(data.error || ("HTTP " + res.status));
-      }
-
-      setStatus("Confirmado! 🍄⭐", true);
-      haptic(60);
-      form.reset();
-      dyn.innerHTML = "";
-    }catch(err){
-      setStatus("Erro ao enviar: " + String(err.message || err), false);
-      haptic(120);
-    }
-  });
 </script>
+
 </body>
 </html>
