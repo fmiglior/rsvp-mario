@@ -110,6 +110,7 @@ border-radius:12px;
 color:#8a0000;
 font-weight:bold;
 text-align:center;
+white-space:pre-wrap;
 }
 
 .block{
@@ -192,7 +193,7 @@ margin-top:8px;
 <script>
 /* ================= CONFIG ================= */
 const ENDPOINT_URL = "https://script.google.com/macros/s/AKfycbxNmmbp80OxpEg1_ZiYceoZN5bXO_D1JJj-aBLXj1wey8FPHOotr5-oHTJ-ujBCKjBV/exec";
-const TOKEN = "MARIO_RSVP_2026"; // tem que ser igual no Apps Script
+const TOKEN = "MARIO_RSVP_2026"; // deve ser igual no Apps Script
 /* ========================================= */
 
 const $ = id => document.getElementById(id);
@@ -200,42 +201,35 @@ const dyn = $("dyn");
 const msg = $("msg");
 const btn = $("btn");
 
-function setMsg(html, kind="success"){
-  msg.innerHTML = `<div class="${kind}">${html}</div>`;
+function setMsg(text, kind="success"){
+  msg.innerHTML = `<div class="${kind}">${text}</div>`;
 }
 
 function rebuildDyn(){
   dyn.innerHTML = "";
-
   const vai = $("vai").value;
   if (vai !== "Sim") return;
 
-  // Responsável sempre é Adulto 1
   const responsavel = $("responsavel").value.trim();
   let a = Number($("adultos").value || 1);
   let c = Number($("criancas").value || 0);
 
-  // Segurança: nunca permitir < 1 adulto se vai = Sim
-  if (a < 1) {
-    $("adultos").value = "1";
-    a = 1;
-  }
+  if (a < 1) { $("adultos").value = "1"; a = 1; }
 
-  // Adulto 1 = responsável (auto)
+  // Adulto 1 = responsável
   dyn.innerHTML += `<label>Adulto 1 (Responsável)</label>
     <input id="adulto1" required readonly placeholder="Preenchido automaticamente" />`;
 
-  // Preenche Adulto 1 com o nome do responsável
   const a1 = document.getElementById("adulto1");
   if (a1) a1.value = responsavel;
 
-  // Adultos adicionais (2..a)
+  // Adultos extras
   for (let i=2; i<=a; i++){
     dyn.innerHTML += `<label>Nome do Adulto ${i}</label>
       <input required placeholder="Adulto ${i}" data-kind="adulto_extra" />`;
   }
 
-  // Crianças (1..c)
+  // Crianças
   for (let i=1; i<=c; i++){
     dyn.innerHTML += `<label>Nome da Criança ${i}</label>
       <input required placeholder="Criança ${i}" data-kind="crianca" />`;
@@ -246,17 +240,14 @@ function rebuildDyn(){
   $(id).addEventListener("change", rebuildDyn);
 });
 
-// Quando digitar responsável, atualiza Adulto 1 em tempo real
 $("responsavel").addEventListener("input", ()=>{
   const a1 = document.getElementById("adulto1");
   if (a1) a1.value = $("responsavel").value.trim();
 });
 
-// Se escolher "Não", faz sentido zerar crianças e adultos volta pra 1 (não importa, mas deixa limpo)
 $("vai").addEventListener("change", ()=>{
   if ($("vai").value === "Não") {
     $("criancas").value = "0";
-    // adultos deixamos como 1 (inofensivo), e não renderiza dyn de qualquer forma
     dyn.innerHTML = "";
   }
 });
@@ -281,23 +272,18 @@ $("rsvp").addEventListener("submit", async (e)=>{
   const adultos = Number($("adultos").value || 1);
   const criancas = Number($("criancas").value || 0);
 
-  // Se vai = Sim, Adulto 1 é responsável e é obrigatório
   if (vai === "Sim" && !responsavel) {
     setMsg("Preencha o nome do responsável 🙂", "error");
     btn.disabled = false; btn.textContent = "Confirmar Presença ⭐";
     return;
   }
 
-  // Coletar nomes:
-  // Adulto 1:
   const nomesAdultos = [];
   if (vai === "Sim") nomesAdultos.push(responsavel);
 
-  // Adultos extra:
   const extraAdults = Array.from(dyn.querySelectorAll('input[data-kind="adulto_extra"]'))
     .map(x=>x.value.trim()).filter(Boolean);
 
-  // Crianças:
   const kids = Array.from(dyn.querySelectorAll('input[data-kind="crianca"]'))
     .map(x=>x.value.trim()).filter(Boolean);
 
@@ -329,14 +315,23 @@ $("rsvp").addEventListener("submit", async (e)=>{
   payload.hash = simpleHash(JSON.stringify(payload));
 
   try{
+    // ✅ SEM CORS/PREFLIGHT: manda como form-urlencoded
+    const formBody = new URLSearchParams();
+    formBody.set("payload", JSON.stringify(payload));
+
     const res = await fetch(ENDPOINT_URL, {
-      method:"POST",
-      headers:{ "Content-Type":"application/json" },
-      body: JSON.stringify(payload)
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" },
+      body: formBody.toString()
     });
 
-    const data = await res.json().catch(()=> ({}));
-    if(!res.ok || !data.ok) throw new Error(data.error || ("HTTP " + res.status));
+    const text = await res.text();
+    let data = {};
+    try { data = JSON.parse(text); } catch(e){}
+
+    if(!res.ok || !data.ok){
+      throw new Error((data && data.error) ? data.error : ("Resposta inválida: " + text));
+    }
 
     setMsg("🎉 Presença confirmada com sucesso!<br/>Estamos muito felizes em celebrar com vocês! ⭐🍄", "success");
 
@@ -344,8 +339,9 @@ $("rsvp").addEventListener("submit", async (e)=>{
     $("adultos").value = "1";
     $("criancas").value = "0";
     dyn.innerHTML = "";
+
   } catch(err){
-    setMsg("Ops! Não consegui enviar agora. Tente novamente em alguns segundos.", "error");
+    setMsg("Erro ao enviar: " + String(err.message || err), "error");
   } finally {
     btn.disabled = false;
     btn.textContent = "Confirmar Presença ⭐";
