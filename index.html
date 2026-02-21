@@ -3,112 +3,105 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Confirmação de Presença</title>
+<title>Aniversário do Murilo</title>
 
 <style>
 *{box-sizing:border-box}
+
 body{
 margin:0;
 font-family:Arial, Helvetica, sans-serif;
 background:linear-gradient(#8ed6ff,#5db9ff);
 min-height:100vh;
 display:flex;
-justify-content:center;
-padding:20px;
+flex-direction:column;
+align-items:center;
+justify-content:flex-start;
+padding:20px 15px 100px 15px;
 color:#222;
 }
 
-/* Nuvens */
-body::before{
-content:"";
-position:fixed;
-top:0;
-left:0;
-right:0;
-height:200px;
-background:
-url('https://i.imgur.com/6Iej2c3.png');
-background-size:contain;
-opacity:.4;
-pointer-events:none;
-}
-
-/* Plataforma verde inferior */
-body::after{
-content:"";
+/* Plataforma verde estilo Mario */
+.platform{
 position:fixed;
 bottom:0;
 left:0;
 right:0;
 height:80px;
-background:linear-gradient(#2ecc40,#1e9f2e);
+background:#2ecc40;
 }
 
+/* Container principal */
 .wrap{
-width:min(600px,100%);
-z-index:1;
+width:100%;
+max-width:500px;
 }
 
+/* Banner */
 .banner{
 background:#ffcc00;
-border-radius:16px;
+border-radius:20px;
 padding:18px;
 text-align:center;
-box-shadow:0 8px 20px rgba(0,0,0,.3);
+box-shadow:0 8px 25px rgba(0,0,0,.25);
 margin-bottom:20px;
 }
 
 .banner h1{
 margin:0;
-font-size:24px;
+font-size:22px;
 color:#d90000;
 }
 
 .banner p{
 margin-top:8px;
-font-size:15px;
+font-size:14px;
 }
 
+/* Card */
 .card{
 background:#ffffff;
-border-radius:18px;
+border-radius:20px;
 padding:20px;
-box-shadow:0 10px 25px rgba(0,0,0,.3);
+box-shadow:0 10px 30px rgba(0,0,0,.25);
 }
 
+/* Labels */
 label{
 display:block;
-margin:12px 0 6px;
+margin:14px 0 6px;
 font-weight:bold;
+font-size:14px;
 }
 
+/* Inputs */
 input,select{
 width:100%;
 padding:12px;
-border-radius:12px;
+border-radius:14px;
 border:2px solid #ddd;
 font-size:14px;
 background:#fff;
 color:#000;
 }
 
-select{
-background:#ffffff;
-color:#000;
-}
-
+/* Linha dupla */
 .row{
-display:grid;
-grid-template-columns:1fr 1fr;
+display:flex;
 gap:10px;
 }
 
+.row > div{
+flex:1;
+}
+
+/* Botão */
 button{
-margin-top:16px;
+margin-top:18px;
 width:100%;
 padding:14px;
 border:0;
-border-radius:14px;
+border-radius:16px;
 font-size:16px;
 font-weight:bold;
 cursor:pointer;
@@ -117,12 +110,12 @@ color:#fff;
 transition:.2s;
 }
 
-button:hover{
-background:#b8000c;
+button:active{
+transform:scale(.98);
 }
 
 .success{
-margin-top:14px;
+margin-top:15px;
 padding:12px;
 background:#d4ffd4;
 border-radius:12px;
@@ -133,8 +126,8 @@ text-align:center;
 
 /* Bloco ? decorativo */
 .block{
-width:50px;
-height:50px;
+width:45px;
+height:45px;
 background:#ffcc00;
 border:4px solid #c49b00;
 border-radius:8px;
@@ -142,17 +135,28 @@ display:flex;
 align-items:center;
 justify-content:center;
 font-weight:bold;
-font-size:26px;
+font-size:24px;
 color:#c49b00;
 position:absolute;
-right:-20px;
-top:-20px;
+right:-15px;
+top:-15px;
 box-shadow:0 6px 12px rgba(0,0,0,.3);
+}
+
+.card-container{
+position:relative;
+}
+
+/* Ajuste Mobile */
+@media (max-width:480px){
+.banner h1{font-size:20px}
+.row{flex-direction:column}
 }
 </style>
 </head>
 
 <body>
+
 <div class="wrap">
 
 <div class="banner">
@@ -160,9 +164,10 @@ box-shadow:0 6px 12px rgba(0,0,0,.3);
 <p>Vai ser uma aventura incrível! Confirme sua presença 💛</p>
 </div>
 
-<div class="card">
+<div class="card-container">
 <div class="block">?</div>
 
+<div class="card">
 <form id="rsvp">
 
 <label>Você vai?</label>
@@ -202,8 +207,11 @@ box-shadow:0 6px 12px rgba(0,0,0,.3);
 
 </form>
 </div>
+</div>
 
 </div>
+
+<div class="platform"></div>
 
 <script>
 const $=id=>document.getElementById(id);
